@@ -1,0 +1,23 @@
+[user]
+        name = Palash Bauri
+        email = palashbauri1@gmail.com
+        username = bauripalash
+        signingkey = CCB7DB2F432F3BCBF25B8F5FC52FC4F01456F7A9
+
+[commit]
+        gpgsign = true
+
+[gpg]
+        program=/usr/bin/gpg
+
+[core]
+        editor = nvim
+        whitespace = fix,trailing-space,cr-at-eol
+
+[init]
+        defaultBranch = main
+
+[web]
+        browser = firefox
+
+

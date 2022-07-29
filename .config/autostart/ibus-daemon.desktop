@@ -1,0 +1,7 @@
+[Desktop Entry]
+Exec=ibus-daemon -drxR
+Icon=
+Name=ibus-daemon
+Path=
+Terminal=False
+Type=Application

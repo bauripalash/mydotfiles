@@ -1,3 +1,7 @@
+set nocompatible
+set encoding=utf-8
+set autoread
+" ========== PLUGINS ===================
 call plug#begin(stdpath('data') . '/plugged')
 
 	Plug 'dracula/vim'
@@ -26,11 +30,18 @@ Plug 'hrsh7th/vim-vsnip'
 " Plug 'dcampos/nvim-snippy'
 " Plug 'dcampos/cmp-snippy'
 call plug#end()
+
+" ======================================
+let mapleader=","
 set mouse=a
 if (has("termguicolors"))
 	set termguicolors
 endif
 
+nnoremap <ESC>[[h   <Home>
+
+set t_Co=256
+let maplocalleader = "\\"
 syntax enable
 colorscheme dracula
 set number
@@ -38,6 +49,23 @@ set clipboard=unnamedplus
 filetype plugin indent on
 set tabstop=4
 set expandtab
+set shiftwidth=4
+set autoindent
+set smartindent
+
+set incsearch
+
+set noswapfile
+set nobackup
+set nowb
+
+set backspace=indent,eol,start
+
+if has('persistent_undo') && isdirectory(expand('~').'/.vim/backups')
+  silent !mkdir ~/.vim/backups > /dev/null 2>&1
+  set undodir=~/.vim/backups
+  set undofile
+endif
 
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>

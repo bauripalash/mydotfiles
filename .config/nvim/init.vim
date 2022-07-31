@@ -17,7 +17,9 @@ Plug 'hrsh7th/nvim-cmp'
 " For vsnip users.
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
-
+Plug 'nvim-lualine/lualine.nvim'
+" If you want to have icons in your statusline choose one of these
+Plug 'kyazdani42/nvim-web-devicons'
 " For luasnip users.
 " Plug 'L3MON4D3/LuaSnip'
 " Plug 'saadparwaiz1/cmp_luasnip'
@@ -33,12 +35,12 @@ call plug#end()
 
 " ======================================
 let mapleader=","
+set timeoutlen=1000
 set mouse=a
 if (has("termguicolors"))
 	set termguicolors
 endif
 
-nnoremap <ESC>[[h   <Home>
 
 set t_Co=256
 let maplocalleader = "\\"
@@ -70,7 +72,7 @@ endif
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>
 noremap <C-f> :NERDTreeFind<CR>
-
+noremap <leader>t :NERDTreeToggle<CR>
 " Start NERDTree when Vim starts with a directory argument.
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |

@@ -1,3 +1,5 @@
+set -U fish_greeting 
+
 fish_add_path $HOME/.cargo/bin
 fish_add_path $HOME/meh
 

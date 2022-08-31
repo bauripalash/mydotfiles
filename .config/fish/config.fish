@@ -21,6 +21,6 @@ fish_add_path $HOME/go/bin
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-eval /home/palash/mambaforge/bin/conda "shell.fish" "hook" $argv | source
+status is-interactive && eval /home/palash/mambaforge/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 

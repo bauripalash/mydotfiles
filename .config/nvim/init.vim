@@ -8,29 +8,29 @@ call plug#begin(stdpath('data') . '/plugged')
 	Plug 'preservim/nerdtree'
 	Plug 'ryanoasis/vim-devicons'
     Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/nvim-cmp'
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'hrsh7th/cmp-buffer'
+    Plug 'hrsh7th/cmp-path'
+    Plug 'hrsh7th/cmp-cmdline'
+    Plug 'hrsh7th/nvim-cmp'
+    Plug 'ziglang/zig.vim'
+    " For vsnip users.
+    Plug 'hrsh7th/cmp-vsnip'
+    Plug 'hrsh7th/vim-vsnip'
+    Plug 'nvim-lualine/lualine.nvim'
+    " If you want to have icons in your statusline choose one of these
+    Plug 'kyazdani42/nvim-web-devicons'
+    " For luasnip users.
+    " Plug 'L3MON4D3/LuaSnip'
+    " Plug 'saadparwaiz1/cmp_luasnip'
 
-" For vsnip users.
-Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/vim-vsnip'
-Plug 'nvim-lualine/lualine.nvim'
-" If you want to have icons in your statusline choose one of these
-Plug 'kyazdani42/nvim-web-devicons'
-" For luasnip users.
-" Plug 'L3MON4D3/LuaSnip'
-" Plug 'saadparwaiz1/cmp_luasnip'
+    " For ultisnips users.
+    " Plug 'SirVer/ultisnips'
+    " Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
-" For ultisnips users.
-" Plug 'SirVer/ultisnips'
-" Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-
-" For snippy users.
-" Plug 'dcampos/nvim-snippy'
-" Plug 'dcampos/cmp-snippy'
+    " For snippy users.
+    " Plug 'dcampos/nvim-snippy'
+    " Plug 'dcampos/cmp-snippy'
 call plug#end()
 
 " ======================================
@@ -68,6 +68,12 @@ if has('persistent_undo') && isdirectory(expand('~').'/.vim/backups')
   set undodir=~/.vim/backups
   set undofile
 endif
+
+inoremap <F9> <C-O>za
+nnoremap <F9> za
+onoremap <F9> <C-C>za
+vnoremap <F9> zf
+
 
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>

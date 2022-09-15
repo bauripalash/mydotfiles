@@ -93,6 +93,14 @@
     capabilities = capabilities
   }
 
+  require('lspconfig')['pyright'].setup{
+    capabilities = capabilities
+  }
+
+  require('lspconfig')['zls'].setup{
+    capabilities = capabilities
+  }
+
 
 
 require('lualine').setup{

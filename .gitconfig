@@ -13,6 +13,7 @@
 [core]
         editor = nvim
         whitespace = fix,trailing-space,cr-at-eol
+	autocrlf = input
 
 [init]
         defaultBranch = main

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Comment[en_US]=
 Comment=
-Exec=/usr/bin/ksuperkey
+Exec=ksuperkey
 GenericName[en_US]=
 GenericName=
 Icon=

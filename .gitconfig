@@ -2,7 +2,7 @@
         name = Palash Bauri
         email = palashbauri1@gmail.com
         username = bauripalash
-        signingkey = CCB7DB2F432F3BCBF25B8F5FC52FC4F01456F7A9
+        signingkey = 893DB938C4F55DCD2DCF9904A46AD0C21F1F9DCF
 
 [commit]
         gpgsign = true

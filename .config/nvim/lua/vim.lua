@@ -12,7 +12,7 @@ local cmd = vim.cmd
 
 local packer = require("packer")
 local cmp = require("cmp")
-
+-----
 -------------------------
 ------- PLUGINS
 -------------------------
@@ -36,8 +36,14 @@ packer.startup(function(use)
 	use("kyazdani42/nvim-web-devicons")
 --	use("dart-lang/dart-vim-plugin")
 --	use("thosakwe/vim-flutter")
-	use("folke/tokyonight.nvim")
-	use("morhetz/gruvbox")
+--	use("folke/tokyonight.nvim")
+--	use("morhetz/gruvbox")
+--	use("udalov/kotlin-vim")
+	use("NLKNguyen/papercolor-theme")
+	use("pineapplegiant/spaceduck")
+	use("sheerun/vim-polyglot")
+	use("github/copilot.vim")
+	use("https://git.sr.ht/~p00f/clangd_extensions.nvim")
 end)
 
 local function map(mode, lhs, rhs, opts)
@@ -83,9 +89,10 @@ opt.incsearch = true
 opt.backspace = "indent,eol,start"
 opt.timeoutlen = 1000
 opt.colorcolumn = "80"
+opt.modeline = true
 --background for gruvbox
 opt.background="light"
-
+--opt.persistent_undo = true
 -- I dont know how to these in Lua
 
 cmd([[ 
@@ -95,8 +102,8 @@ cmd([[
 	  set undodir=~/.vim/backups
 	  set undofile
 	endif
+    colorscheme spaceduck
 
-    colorscheme tokyonight-night
 
 	autocmd StdinReadPre * let s:std_in=1
 
@@ -201,9 +208,18 @@ require("lspconfig")["rust_analyzer"].setup({
 require("lspconfig")["gopls"].setup({
 	capabilities = capabilities,
 })
-require("lspconfig")["clangd"].setup({
-	capabilities = capabilities,
-})
+--require("lspconfig")["clangd"].setup({
+--	capabilities = capabilities,
+--})
+require("clangd_extensions").setup{
+	server = {
+		capabilities = capabilities,
+	}
+}
+
+--require("lspconfig")["ccls"].setup({
+--	capabilities = capabilities,
+--})
 
 require("lspconfig")["pyright"].setup({
 	capabilities = capabilities,
@@ -236,9 +252,9 @@ require("lspconfig")["cssls"].setup({
 --	capabilities = capabilities,
 --})
 
-require("lspconfig")["denols"].setup({
-	capabilities = capabilities,
-})
+--require("lspconfig")["denols"].setup({
+--	capabilities = capabilities,
+--})
 
 require('lspconfig')['tsserver'].setup({
 	capabilities = capabilities,
@@ -248,7 +264,11 @@ require("lspconfig")["racket_langserver"].setup({
 	capabilities = capabilities,
 })
 
-require("lspconfig")["sumneko_lua"].setup({
+require("lspconfig")["kotlin_language_server"].setup({
+	capabilities = capabilities,
+})
+
+require("lspconfig")["lua_ls"].setup({
 	settings = {
 		Lua = {
 			runtime = {
@@ -272,7 +292,7 @@ require("lspconfig")["sumneko_lua"].setup({
 
 require("lualine").setup({
 	options = {
-		theme = "tokyonight",
+		theme = "spaceduck",
 		icons_enabled = true,
 	},
 })

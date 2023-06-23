@@ -1,12 +1,15 @@
 set -gx fish_greeting 
 
 fish_add_path $HOME/.cargo/bin
+fish_add_path $HOME/.deno/bin
 fish_add_path $HOME/meh
 fish_add_path $HOME/meh/flutter/bin
 fish_add_path $HOME/meh/v
 fish_add_path $HOME/.config/yarn/global/node_modules/.bin
 fish_add_path $HOME/.sdkman/candidates/kotlin/1.8.0/bin
 fish_add_path /usr/lib/jvm/java-19-openjdk/bin
+fish_add_path $HOME/meh/emsdk
+fish_add_path $HOME/meh/emsdk/upstream/emscripten
 
 set -gx GPG_TTY (tty)
 set -gx hydro_symbol_prompt ❄️
@@ -23,6 +26,7 @@ alias vi nvim
 alias sshh "kitty +kitten ssh"
 alias lstat "stat -c \"%a %n\""
 alias clipnur "cargo clippy -- -W clippy::nursery"
+alias emsdk_setup ". home/palash/meh/emsdk/emsdk_env.fish"
 
 fish_add_path $ANDROID_HOME/cmdline-tools/latest/bin
 fish_add_path $ANDROID_HOME/platform-tools

@@ -20,8 +20,10 @@ cmd([[ packadd packer.nvim ]])
 packer.startup(function(use)
 	use("wbthomason/packer.nvim")
 --	use("dracula/vim")
-	use("preservim/nerdtree")
-	use("ryanoasis/vim-devicons")
+--	use("preservim/nerdtree")
+--	use("ryanoasis/vim-devicons")
+--	use("bauripalash/vim-devicons")
+	use("nvim-tree/nvim-tree.lua")
 	use("neovim/nvim-lspconfig")
 	use("hrsh7th/cmp-nvim-lsp")
 	use("hrsh7th/cmp-buffer")
@@ -33,18 +35,40 @@ packer.startup(function(use)
 	use("hrsh7th/cmp-vsnip")
 	use("hrsh7th/vim-vsnip")
 	use("nvim-lualine/lualine.nvim")
-	use("kyazdani42/nvim-web-devicons")
+	use{"bauripalash/nvim-web-devicons" , branch="zigicon"}
 --	use("dart-lang/dart-vim-plugin")
 --	use("thosakwe/vim-flutter")
 --	use("folke/tokyonight.nvim")
 --	use("morhetz/gruvbox")
 --	use("udalov/kotlin-vim")
-	use("NLKNguyen/papercolor-theme")
-	use("pineapplegiant/spaceduck")
+--	use("NLKNguyen/papercolor-theme")
+--	use("pineapplegiant/spaceduck")
 	use("sheerun/vim-polyglot")
-	use("github/copilot.vim")
+--	use('nyoom-engineering/oxocarbon.nvim')
+	use{"catppuccin/nvim", as = "catppuccin"}
+
+--	use("github/copilot.vim")
 	use("https://git.sr.ht/~p00f/clangd_extensions.nvim")
+	use {
+	  'nvim-telescope/telescope.nvim', tag = '0.1.1',
+	  requires = { {'nvim-lua/plenary.nvim'} }
+	}
+	use("nvim-treesitter/nvim-treesitter")
+	use("ziglang/zig.vim")
+	use {'akinsho/bufferline.nvim',
+		tag = "*",
+		requires = 'nvim-tree/nvim-web-devicons'
+	}
 end)
+
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+vim.keymap.set('n', '<leader>fr', builtin.lsp_references, {})
+vim.keymap.set('n', '<leader>fm',builtin.lsp_implementations, {})
+vim.keymap.set('n', '<leader>fd',builtin.lsp_definitions, {})
 
 local function map(mode, lhs, rhs, opts)
 	local options = { noremap = true }
@@ -57,6 +81,7 @@ end
 g.mapleader = ","
 g.maplocalleader = "\\"
 
+
 -- inoremap <F9> <C-O>za
 -- nnoremap <F9> za
 -- onoremap <F9> <C-C>za
@@ -65,10 +90,10 @@ map("i", "<F9>", "<C-O>za")
 map("n", "<F9>", "za")
 map("o", "<F9>", "<C-C>za")
 map("v", "<F9>", "zf")
-map("n", "<C-t>", ":NERDTreeToggle<CR>")
-map("n", "<Leader>t", ":NERDTreeToggle<CR>")
-map("v", "<Leader>n", ":NERDTreeFocus")
-map("v", "<C-f>", ":NERDTreeFind")
+map("n", "<C-t>", ":NvimTreeToggle<CR>")
+map("n", "<Leader>t", ":NvimTreeToggle<CR>")
+map("v", "<Leader>n", ":NvimTreeFocus")
+map("v", "<C-f>", ":NvimTreeFind")
 map("v", "<F9>", "zf")
 
 opt.encoding = "utf-8"
@@ -91,9 +116,45 @@ opt.timeoutlen = 1000
 opt.colorcolumn = "80"
 opt.modeline = true
 --background for gruvbox
-opt.background="light"
+opt.background="dark"
 --opt.persistent_undo = true
 -- I dont know how to these in Lua
+g.zig_fmt_autosave = 0
+
+require("catppuccin").setup{
+	termi_colors = true,
+	transparent_background = false,
+	color_overrides = {
+		mocha = {
+			base = "#000000",
+			mantle = "#000000",
+			crust = "#000000",
+		},
+	},
+}
+
+local function my_on_attach(bufnr)
+	local napi = require("nvim-tree.api")
+	local function opts(desc)
+    	return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  	end
+
+	napi.config.mappings.default_on_attach(bufnr)
+	vim.keymap.set('n' , 't' , napi.node.open.tab , opts('Open: New Tab'))
+end
+
+require("nvim-tree").setup({
+	on_attach = my_on_attach,
+})
+
+require'nvim-web-devicons'.setup({
+
+})
+
+require("bufferline").setup{
+
+}
+
 
 cmd([[ 
 	syntax enable 
@@ -102,7 +163,7 @@ cmd([[
 	  set undodir=~/.vim/backups
 	  set undofile
 	endif
-    colorscheme spaceduck
+	colorscheme catppuccin-mocha
 
 
 	autocmd StdinReadPre * let s:std_in=1
@@ -111,6 +172,7 @@ cmd([[
     \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
 	
 	au BufNewFile,BufRead *.v set filetype=vlang
+	au BufNewFile,BufRead *.md setlocal textwidth=80
 ]])
 
 cmp.setup({
@@ -192,6 +254,11 @@ cmp.setup.cmdline(":", {
 	}),
 })
 
+--require("navigator").setup({
+--	lsp = {
+--		disable_lsp = {'clang'},
+--	}
+--})
 ----------------------------------
 -- LANGUAGE SERVERS
 -- -------------------------------
@@ -201,6 +268,8 @@ local lsp_caps = vim.lsp.protocol.make_client_capabilities()
 lsp_caps.textDocument.completion.completionItem.snippetSupport = true
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities(lsp_caps)
+local clang_cap = require("cmp_nvim_lsp").default_capabilities(lsp_caps)
+clang_cap.offsetEncoding = 'utf-8'
 
 require("lspconfig")["rust_analyzer"].setup({
 	capabilities = capabilities,
@@ -213,8 +282,8 @@ require("lspconfig")["gopls"].setup({
 --})
 require("clangd_extensions").setup{
 	server = {
-		capabilities = capabilities,
-	}
+		capabilities = clang_cap,
+	},
 }
 
 --require("lspconfig")["ccls"].setup({
@@ -240,6 +309,11 @@ require("lspconfig")["dartls"].setup({
 require("lspconfig")["vls"].setup({
 	capabilities = capabilities,
 })
+
+require("lspconfig")["serve_d"].setup({
+	capabilities = capabilities,
+})
+
 require("lspconfig")["html"].setup({
 	capabilities = capabilities,
 })
@@ -292,7 +366,7 @@ require("lspconfig")["lua_ls"].setup({
 
 require("lualine").setup({
 	options = {
-		theme = "spaceduck",
+		theme = "catppuccin",
 		icons_enabled = true,
 	},
 })

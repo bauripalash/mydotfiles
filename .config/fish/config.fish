@@ -7,16 +7,13 @@ fish_add_path $HOME/meh/flutter/bin
 fish_add_path $HOME/meh/v
 fish_add_path $HOME/.config/yarn/global/node_modules/.bin
 fish_add_path $HOME/.sdkman/candidates/kotlin/1.8.0/bin
-fish_add_path /usr/lib/jvm/java-19-openjdk/bin
 fish_add_path $HOME/meh/emsdk
 fish_add_path $HOME/meh/emsdk/upstream/emscripten
+fish_add_path $HOME/.dotnet/tools
 
 set -gx GPG_TTY (tty)
 set -gx hydro_symbol_prompt ❄️
 set -gx OOO_FORCE_DESKTOP "gnome" libreoffice
-set -gx GTK_IM_MODULE ibus
-set -gx QT_IM_MODULE ibus
-set -gx XMODIFIERS @im=ibus
 set -gx ANDROID_HOME $HOME/Android/Sdk
 set -gx ANDROID_NDK_HOME /home/palash/Android/Sdk/ndk/25.1.8937393
 set -gx CHROME_EXECUTABLE /usr/bin/chromium
@@ -41,6 +38,9 @@ fish_add_path $ANDROID_HOME/tools
 #status is-interactive && eval /home/palash/mambaforge/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 
+function runpio
+	source ~/.platformio/penv/bin/activate.fish
+end
 
 function makelight
 	# Colorscheme: Tomorrow

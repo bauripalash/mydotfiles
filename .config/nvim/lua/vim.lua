@@ -1,7 +1,6 @@
 --------------------------
 ------ VIM CONFIG
 --------------------------
-
 -------------------------
 ------- SHORTCUTS
 -------------------------
@@ -10,32 +9,90 @@ local g = vim.g -- Used as `let`
 local opt = vim.opt -- Used as `set`
 local cmd = vim.cmd
 
-local packer = require("packer")
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+local plugins = {
+	"nvim-tree/nvim-tree.lua",
+	"stevearc/vim-arduino",
+	"neovim/nvim-lspconfig",
+	"hrsh7th/cmp-nvim-lsp",
+	"hrsh7th/cmp-buffer",
+	"hrsh7th/cmp-path",
+	"hrsh7th/cmp-cmdline",
+	"hrsh7th/nvim-cmp",
+	"hrsh7th/cmp-vsnip",
+	"nvim-lualine/lualine.nvim",
+	"nvim-tree/nvim-web-devicons",
+	"sheerun/vim-polyglot",
+	"https://git.sr.ht/~p00f/clangd_extensions.nvim",
+	"nvim-treesitter/nvim-treesitter",
+	"ziglang/zig.vim",
+	{
+			"voldikss/vim-floaterm",
+			keys = {
+                    {"<F7>" , "<cmd>FloatermNew<CR>" , desc = "New Terminal"}
+			},
+	},
+	{
+		"akinsho/bufferline.nvim",
+		tag = "v4.5.2",
+		dependencies = { "nvim-tree/nvim-web-devicons" }
+	},
+	{
+		"catppuccin/nvim",
+		name = "catppuccin"
+
+	},
+	{
+		"nvim-telescope/telescope.nvim",
+		tag = "0.1.1",
+		dependencies = { "nvim-lua/plenary.nvim" }
+	}
+
+
+	
+}
+
+require("lazy").setup(plugins)
+
+-- local packer = require("packer")
 local cmp = require("cmp")
 -----
 -------------------------
 ------- PLUGINS
 -------------------------
-cmd([[ packadd packer.nvim ]])
-packer.startup(function(use)
-	use("wbthomason/packer.nvim")
+-- cmd([[ packadd packer.nvim ]])
+--packer.startup(function(use)
+-- x	use("wbthomason/packer.nvim")
 --	use("dracula/vim")
 --	use("preservim/nerdtree")
 --	use("ryanoasis/vim-devicons")
 --	use("bauripalash/vim-devicons")
-	use("nvim-tree/nvim-tree.lua")
-	use("neovim/nvim-lspconfig")
-	use("hrsh7th/cmp-nvim-lsp")
-	use("hrsh7th/cmp-buffer")
-	use("hrsh7th/cmp-path")
-	use("hrsh7th/cmp-cmdline")
-	use("hrsh7th/nvim-cmp")
+-- x	use("nvim-tree/nvim-tree.lua")
+-- x	use("stevearc/vim-arduino")
+-- x	use("neovim/nvim-lspconfig")
+-- x	use("hrsh7th/cmp-nvim-lsp")
+-- x	use("hrsh7th/cmp-buffer")
+-- x	use("hrsh7th/cmp-path")
+-- x	use("hrsh7th/cmp-cmdline")
+-- x	use("hrsh7th/nvim-cmp")
 --	use("ollykel/v-vim")
 --	use("sam4llis/nvim-tundra")
-	use("hrsh7th/cmp-vsnip")
-	use("hrsh7th/vim-vsnip")
-	use("nvim-lualine/lualine.nvim")
-	use{"bauripalash/nvim-web-devicons" , branch="zigicon"}
+-- x	use("hrsh7th/cmp-vsnip")
+-- x	use("hrsh7th/vim-vsnip")
+-- x	use("nvim-lualine/lualine.nvim")
+-- x	use("nvim-tree/nvim-web-devicons")
 --	use("dart-lang/dart-vim-plugin")
 --	use("thosakwe/vim-flutter")
 --	use("folke/tokyonight.nvim")
@@ -43,23 +100,27 @@ packer.startup(function(use)
 --	use("udalov/kotlin-vim")
 --	use("NLKNguyen/papercolor-theme")
 --	use("pineapplegiant/spaceduck")
-	use("sheerun/vim-polyglot")
+-- x	use("sheerun/vim-polyglot")
 --	use('nyoom-engineering/oxocarbon.nvim')
-	use{"catppuccin/nvim", as = "catppuccin"}
+-- x	use{"catppuccin/nvim", as = "catppuccin"}
 
+-- x	use{"bauripalash/defold-nvim-lsp" , rtp = "defold"}
 --	use("github/copilot.vim")
-	use("https://git.sr.ht/~p00f/clangd_extensions.nvim")
-	use {
-	  'nvim-telescope/telescope.nvim', tag = '0.1.1',
-	  requires = { {'nvim-lua/plenary.nvim'} }
-	}
-	use("nvim-treesitter/nvim-treesitter")
-	use("ziglang/zig.vim")
-	use {'akinsho/bufferline.nvim',
-		tag = "*",
-		requires = 'nvim-tree/nvim-web-devicons'
-	}
-end)
+-- x	use("https://git.sr.ht/~p00f/clangd_extensions.nvim")
+-- x	use {
+-- x	  'nvim-telescope/telescope.nvim', tag = '0.1.1',
+-- x	  requires = { {'nvim-lua/plenary.nvim'} }
+-- x	}
+-- x	use("nvim-treesitter/nvim-treesitter")
+-- x	use("ziglang/zig.vim")
+-- x	use {'akinsho/bufferline.nvim',
+-- x		tag = "*",
+-- x		requires = 'nvim-tree/nvim-web-devicons'
+-- x	}
+
+ -- x end)
+
+--require("Defold-LuaLs")
 
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
@@ -96,6 +157,15 @@ map("v", "<Leader>n", ":NvimTreeFocus")
 map("v", "<C-f>", ":NvimTreeFind")
 map("v", "<F9>", "zf")
 
+map("v" , "<leader>xa" , "<cmd>ArduinoAttach<CR>")
+map("v" , "<leader>xv", "<cmd>ArduinoVerify<CR>" )
+map("v" , "<leader>xu", "<cmd>ArduinoUpload<CR>")
+map("v" , "<leader>xus", "<cmd>ArduinoUploadAndSerial<CR>")
+map("v" , "<leader>xus", "<cmd>ArduinoUploadAndSerial<CR>")
+map("v" , "<leader>xb", "<cmd>ArduinoChooseBoard<CR>")
+map("v" , "<leader>xp", "<cmd>ArduinoChooseProgrammer<CR>")
+
+
 opt.encoding = "utf-8"
 opt.mouse = "a"
 opt.clipboard = "unnamedplus"
@@ -119,7 +189,7 @@ opt.modeline = true
 opt.background="dark"
 --opt.persistent_undo = true
 -- I dont know how to these in Lua
-g.zig_fmt_autosave = 0
+--g.zig_fmt_autosave = 0
 
 require("catppuccin").setup{
 	termi_colors = true,
@@ -151,9 +221,9 @@ require'nvim-web-devicons'.setup({
 
 })
 
-require("bufferline").setup{
-
-}
+--- require("bufferline").setup{
+---
+--- }
 
 
 cmd([[ 
@@ -175,7 +245,47 @@ cmd([[
 	au BufNewFile,BufRead *.md setlocal textwidth=80
 ]])
 
+local kind_icons = {
+  Text = "",
+  Method = "󰆧",
+  Function = "󰊕",
+  Constructor = "",
+  Field = "󰇽",
+  Variable = "󰂡",
+  Class = "󰠱",
+  Interface = "",
+  Module = "",
+  Property = "󰜢",
+  Unit = "",
+  Value = "󰎠",
+  Enum = "",
+  Keyword = "󰌋",
+  Snippet = "",
+  Color = "󰏘",
+  File = "󰈙",
+  Reference = "",
+  Folder = "󰉋",
+  EnumMember = "",
+  Constant = "󰏿",
+  Struct = "",
+  Event = "",
+  Operator = "󰆕",
+  TypeParameter = "󰅲",
+}
 cmp.setup({
+	formatting = {
+    format = function(entry, vim_item)
+      vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) 
+	  vim_item.menu = ({
+        buffer = "[Buffer]",
+        nvim_lsp = "[LSP]",
+        luasnip = "[LuaSnip]",
+        nvim_lua = "[Lua]",
+        latex_symbols = "[LaTeX]",
+      })[entry.source.name]
+      return vim_item
+    end
+	},
 	snippet = {
 		-- REQUIRED - you must specify a snippet engine
 		expand = function(args)
@@ -259,14 +369,29 @@ cmp.setup.cmdline(":", {
 --		disable_lsp = {'clang'},
 --	}
 --})
+--vim.lsp.set_log_level("debug")
+--vim.api.nvim_create_autocmd('LspAttach', {
+--	  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+--  callback = function(ev)
+--   local client = vim.lsp.get_client_by_id(args.data.client_id)
+--   print(client)
+--   client.server_capabilities.semanticTokensProvider = nil
+--  end,
+-- })
+
+
 ----------------------------------
 -- LANGUAGE SERVERS
 -- -------------------------------
 
 local lsp_caps = vim.lsp.protocol.make_client_capabilities()
 
-lsp_caps.textDocument.completion.completionItem.snippetSupport = true
+local ard_caps = vim.lsp.protocol.make_client_capabilities()
+ard_caps.textDocument.semanticTokens = vim.NIL
+ard_caps.workspace.semanticTokens = vim.NIL
 
+
+lsp_caps.textDocument.completion.completionItem.snippetSupport = true
 local capabilities = require("cmp_nvim_lsp").default_capabilities(lsp_caps)
 local clang_cap = require("cmp_nvim_lsp").default_capabilities(lsp_caps)
 clang_cap.offsetEncoding = 'utf-8'
@@ -274,21 +399,36 @@ clang_cap.offsetEncoding = 'utf-8'
 require("lspconfig")["rust_analyzer"].setup({
 	capabilities = capabilities,
 })
+
+local function on_attach(client , bufnr)
+	print(client.server_capabilities.semanticTokensProvider)
+	client.server_capabilities.semanticTokensProvider = nil
+end
+
+require("lspconfig")["arduino_language_server"].setup({
+	cmd = { "arduino-language-server",
+		"-cli-config", "$HOME/.arduino15/arduino-cli.yaml",
+		"-fqbn","esp8266:esp8266"
+	},
+	capabilities = capabilities,
+	on_attach = on_attach
+})
+
 require("lspconfig")["gopls"].setup({
 	capabilities = capabilities,
 })
 --require("lspconfig")["clangd"].setup({
 --	capabilities = capabilities,
 --})
-require("clangd_extensions").setup{
-	server = {
-		capabilities = clang_cap,
-	},
-}
+--require("clangd_extensions").setup{
+--	server = {
+--		capabilities = clang_cap,
+--	},
+--}
 
---require("lspconfig")["ccls"].setup({
---	capabilities = capabilities,
---})
+require("lspconfig")["ccls"].setup({
+	capabilities = capabilities,
+})
 
 require("lspconfig")["pyright"].setup({
 	capabilities = capabilities,
@@ -338,32 +478,66 @@ require("lspconfig")["racket_langserver"].setup({
 	capabilities = capabilities,
 })
 
+require("lspconfig")["gdscript"].setup({
+	capabilities = capabilities
+})
+
 require("lspconfig")["kotlin_language_server"].setup({
 	capabilities = capabilities,
 })
 
 require("lspconfig")["lua_ls"].setup({
+  on_init = function(client)
+    local path = client.workspace_folders[1].name
+    if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
+      return
+    end
+
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        -- Tell the language server which version of Lua you're using
+        -- (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT'
+      },
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = true,
+        library = {
+			vim.fn.globpath(vim.o.runtimepath , "api/library/"),
+			vim.env.VIMRUNTIME,
+        },
+		userThirdParty = {
+			--"/home/palash/Games/addons",
+		},
+        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+        --library = vim.api.nvim_get_runtime_file("", true)
+      }
+    })
+  end,
 	settings = {
 		Lua = {
-			runtime = {
-				version = "LuaJIT",
-			},
 
-			diagnostic = {
-				globals = { "vim" },
-			},
-
-			workspace = {
-				library = vim.api.nvim_get_runtime_file("", true),
-			},
-
-			telemetry = {
-				enable = false,
-			},
 		},
 	},
 })
 
+
+--			runtime = {
+--				version = "LuaJIT",
+--			},
+--
+--			diagnostic = {
+--				globals = { "vim" },
+--			},
+--
+--			workspace = {
+--				library = vim.api.nvim_get_runtime_file("", true),
+--				userThirdParty = {"/home/palash/Games/addons"}
+--			},
+--
+--			telemetry = {
+--				enable = false,
+--			},
 require("lualine").setup({
 	options = {
 		theme = "catppuccin",

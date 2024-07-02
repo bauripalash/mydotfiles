@@ -10,6 +10,7 @@ fish_add_path $HOME/.sdkman/candidates/kotlin/1.8.0/bin
 fish_add_path $HOME/meh/emsdk
 fish_add_path $HOME/meh/emsdk/upstream/emscripten
 fish_add_path $HOME/.dotnet/tools
+fish_add_path $HOME/meh/flutter/bin
 
 set -gx GPG_TTY (tty)
 set -gx hydro_symbol_prompt ❄️

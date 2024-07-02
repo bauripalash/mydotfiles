@@ -32,6 +32,7 @@ local plugins = {
 	"hrsh7th/cmp-cmdline",
 	"hrsh7th/nvim-cmp",
 	"hrsh7th/cmp-vsnip",
+	"hrsh7th/vim-vsnip",
 	"nvim-lualine/lualine.nvim",
 	"nvim-tree/nvim-web-devicons",
 	"sheerun/vim-polyglot",
@@ -56,80 +57,20 @@ local plugins = {
 	},
 	{
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.1",
+		tag = "0.1.x",
 		dependencies = { "nvim-lua/plenary.nvim" }
+	},
+	{
+		'nvim-telescope/telescope-fzf-native.nvim',
+		build = 'make'
 	}
-
-
-	
 }
 
 require("lazy").setup(plugins)
 
--- local packer = require("packer")
 local cmp = require("cmp")
------
--------------------------
-------- PLUGINS
--------------------------
--- cmd([[ packadd packer.nvim ]])
---packer.startup(function(use)
--- x	use("wbthomason/packer.nvim")
---	use("dracula/vim")
---	use("preservim/nerdtree")
---	use("ryanoasis/vim-devicons")
---	use("bauripalash/vim-devicons")
--- x	use("nvim-tree/nvim-tree.lua")
--- x	use("stevearc/vim-arduino")
--- x	use("neovim/nvim-lspconfig")
--- x	use("hrsh7th/cmp-nvim-lsp")
--- x	use("hrsh7th/cmp-buffer")
--- x	use("hrsh7th/cmp-path")
--- x	use("hrsh7th/cmp-cmdline")
--- x	use("hrsh7th/nvim-cmp")
---	use("ollykel/v-vim")
---	use("sam4llis/nvim-tundra")
--- x	use("hrsh7th/cmp-vsnip")
--- x	use("hrsh7th/vim-vsnip")
--- x	use("nvim-lualine/lualine.nvim")
--- x	use("nvim-tree/nvim-web-devicons")
---	use("dart-lang/dart-vim-plugin")
---	use("thosakwe/vim-flutter")
---	use("folke/tokyonight.nvim")
---	use("morhetz/gruvbox")
---	use("udalov/kotlin-vim")
---	use("NLKNguyen/papercolor-theme")
---	use("pineapplegiant/spaceduck")
--- x	use("sheerun/vim-polyglot")
---	use('nyoom-engineering/oxocarbon.nvim')
--- x	use{"catppuccin/nvim", as = "catppuccin"}
+local feedkeys = require("cmp.utils.feedkeys")
 
--- x	use{"bauripalash/defold-nvim-lsp" , rtp = "defold"}
---	use("github/copilot.vim")
--- x	use("https://git.sr.ht/~p00f/clangd_extensions.nvim")
--- x	use {
--- x	  'nvim-telescope/telescope.nvim', tag = '0.1.1',
--- x	  requires = { {'nvim-lua/plenary.nvim'} }
--- x	}
--- x	use("nvim-treesitter/nvim-treesitter")
--- x	use("ziglang/zig.vim")
--- x	use {'akinsho/bufferline.nvim',
--- x		tag = "*",
--- x		requires = 'nvim-tree/nvim-web-devicons'
--- x	}
-
- -- x end)
-
---require("Defold-LuaLs")
-
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-vim.keymap.set('n', '<leader>fr', builtin.lsp_references, {})
-vim.keymap.set('n', '<leader>fm',builtin.lsp_implementations, {})
-vim.keymap.set('n', '<leader>fd',builtin.lsp_definitions, {})
 
 local function map(mode, lhs, rhs, opts)
 	local options = { noremap = true }
@@ -147,6 +88,8 @@ g.maplocalleader = "\\"
 -- nnoremap <F9> za
 -- onoremap <F9> <C-C>za
 -- vnoremap <F9> zf
+
+
 map("i", "<F9>", "<C-O>za")
 map("n", "<F9>", "za")
 map("o", "<F9>", "<C-C>za")
@@ -158,12 +101,21 @@ map("v", "<C-f>", ":NvimTreeFind")
 map("v", "<F9>", "zf")
 
 map("v" , "<leader>xa" , "<cmd>ArduinoAttach<CR>")
-map("v" , "<leader>xv", "<cmd>ArduinoVerify<CR>" )
+map("v" , "<leader>xv", "<cmd>ArduinoVerify<CR>")
 map("v" , "<leader>xu", "<cmd>ArduinoUpload<CR>")
 map("v" , "<leader>xus", "<cmd>ArduinoUploadAndSerial<CR>")
 map("v" , "<leader>xus", "<cmd>ArduinoUploadAndSerial<CR>")
 map("v" , "<leader>xb", "<cmd>ArduinoChooseBoard<CR>")
 map("v" , "<leader>xp", "<cmd>ArduinoChooseProgrammer<CR>")
+
+map('n', '<leader>ff', '<cmd>Telescope find_files<cr>')
+map('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
+map('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
+map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
+map('n', '<leader>fr', '<cmd>Telescope lsp_references<cr>')
+map('n', '<leader>fm', '<cmd>Telescope lsp_implementations<cr>')
+map('n', '<leader>fd', '<cmd>Telescope lsp_definitions<cr>')
+
 
 
 opt.encoding = "utf-8"
@@ -305,7 +257,7 @@ cmp.setup({
 			if cmp.visible() then
 				cmp.select_next_item()
 			elseif vim.fn["vsnip#available"](1) == 1 then
-				feedkey("<Plug>(vsnip-expand-or-jump)", "")
+				feedkeys.call("<Plug>(vsnip-expand-or-jump)", "")
 			--    elseif has_words_before() then
 			--      cmp.complete()
 			else
@@ -317,7 +269,7 @@ cmp.setup({
 			if cmp.visible() then
 				cmp.select_prev_item()
 			elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-				feedkey("<Plug>(vsnip-jump-prev)", "")
+				feedkeys.call("<Plug>(vsnip-jump-prev)", "")
 			end
 		end, { "i", "s" }),
 		["<C-b>"] = cmp.mapping.scroll_docs(-4),
@@ -417,18 +369,18 @@ require("lspconfig")["arduino_language_server"].setup({
 require("lspconfig")["gopls"].setup({
 	capabilities = capabilities,
 })
---require("lspconfig")["clangd"].setup({
---	capabilities = capabilities,
---})
+require("lspconfig")["clangd"].setup({
+	capabilities = capabilities,
+})
 --require("clangd_extensions").setup{
 --	server = {
 --		capabilities = clang_cap,
 --	},
 --}
 
-require("lspconfig")["ccls"].setup({
-	capabilities = capabilities,
-})
+--require("lspconfig")["ccls"].setup({
+--	capabilities = capabilities,
+--})
 
 require("lspconfig")["pyright"].setup({
 	capabilities = capabilities,
@@ -483,6 +435,10 @@ require("lspconfig")["gdscript"].setup({
 })
 
 require("lspconfig")["kotlin_language_server"].setup({
+	capabilities = capabilities,
+})
+
+require("lspconfig")["clojure_lsp"].setup({
 	capabilities = capabilities,
 })
 

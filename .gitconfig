@@ -22,3 +22,7 @@
         browser = firefox
 
 
+[safe]
+	directory = /home/palash/flutter
+[protocol "file"]
+	allow = always

@@ -5,20 +5,26 @@
 ------- SHORTCUTS
 -------------------------
 local api = vim.api
-local g = vim.g -- Used as `let`
+local g = vim.g     -- Used as `let`
 local opt = vim.opt -- Used as `set`
 local cmd = vim.cmd
 
+--local gdproject = io.open(vim.fn.getcwd()..'/project.godot', 'r')
+--if gdproject then
+--    io.close(gdproject)
+--    vim.fn.serverstart './godothost'
+--end
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable", -- latest stable release
+		lazypath,
+	})
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -39,11 +45,16 @@ local plugins = {
 	"https://git.sr.ht/~p00f/clangd_extensions.nvim",
 	"nvim-treesitter/nvim-treesitter",
 	"ziglang/zig.vim",
+	"lommix/godot.nvim",
 	{
-			"voldikss/vim-floaterm",
-			keys = {
-                    {"<F7>" , "<cmd>FloatermNew<CR>" , desc = "New Terminal"}
-			},
+		"numToStr/Comment.nvim",
+		opts = {},
+	},
+	{
+		"voldikss/vim-floaterm",
+		keys = {
+			{ "<F7>", "<cmd>FloatermNew<CR>", desc = "New Terminal" }
+		},
 	},
 	{
 		"akinsho/bufferline.nvim",
@@ -57,16 +68,71 @@ local plugins = {
 	},
 	{
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.x",
+		branch = "0.1.x",
 		dependencies = { "nvim-lua/plenary.nvim" }
 	},
 	{
 		'nvim-telescope/telescope-fzf-native.nvim',
 		build = 'make'
-	}
+	},
+	{
+		"jim-at-jibba/micropython.nvim",
+		dependencies = { "akinsho/toggleterm.nvim", "stevearc/dressing.nvim" },
+	},
+
+	{
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+		config = function()
+			local configs = require("nvim-treesitter.configs")
+
+			configs.setup({
+				ensure_installed = { "c",
+					"go",
+					"lua",
+					"java",
+					"vim",
+					"python",
+					"zig",
+					"javascript",
+					"typescript",
+					"html",
+					"gdscript",
+					"godot_resource",
+					"gdshader" },
+				sync_install = false,
+				highlight = { enable = true },
+				indent = { enable = true },
+			})
+		end
+	},
+	{
+		"jim-at-jibba/micropython.nvim",
+		dependencies = { "akinsho/toggleterm.nvim", "stevearc/dressing.nvim" },
+	},
+	{
+	  "folke/todo-comments.nvim",
+	  dependencies = { "nvim-lua/plenary.nvim" },
+	  opts = {
+		-- your configuration comes here
+		-- or leave it empty to use the default settings
+		-- refer to the configuration section below
+	  }
+	},
+	{
+	  "terrastruct/d2-vim",
+	  ft = { "d2" },
+	},
+	{
+	  "ravsii/tree-sitter-d2",
+	  dependencies = { "nvim-treesitter/nvim-treesitter" },
+	  build = "make nvim-install",
+	},
+	"mfussenegger/nvim-jdtls",
 }
 
 require("lazy").setup(plugins)
+require("Comment").setup()
 
 local cmp = require("cmp")
 local feedkeys = require("cmp.utils.feedkeys")
@@ -100,13 +166,13 @@ map("v", "<Leader>n", ":NvimTreeFocus")
 map("v", "<C-f>", ":NvimTreeFind")
 map("v", "<F9>", "zf")
 
-map("v" , "<leader>xa" , "<cmd>ArduinoAttach<CR>")
-map("v" , "<leader>xv", "<cmd>ArduinoVerify<CR>")
-map("v" , "<leader>xu", "<cmd>ArduinoUpload<CR>")
-map("v" , "<leader>xus", "<cmd>ArduinoUploadAndSerial<CR>")
-map("v" , "<leader>xus", "<cmd>ArduinoUploadAndSerial<CR>")
-map("v" , "<leader>xb", "<cmd>ArduinoChooseBoard<CR>")
-map("v" , "<leader>xp", "<cmd>ArduinoChooseProgrammer<CR>")
+map("v", "<leader>xa", "<cmd>ArduinoAttach<CR>")
+map("v", "<leader>xv", "<cmd>ArduinoVerify<CR>")
+map("v", "<leader>xu", "<cmd>ArduinoUpload<CR>")
+map("v", "<leader>xus", "<cmd>ArduinoUploadAndSerial<CR>")
+map("v", "<leader>xus", "<cmd>ArduinoUploadAndSerial<CR>")
+map("v", "<leader>xb", "<cmd>ArduinoChooseBoard<CR>")
+map("v", "<leader>xp", "<cmd>ArduinoChooseProgrammer<CR>")
 
 map('n', '<leader>ff', '<cmd>Telescope find_files<cr>')
 map('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
@@ -115,12 +181,12 @@ map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
 map('n', '<leader>fr', '<cmd>Telescope lsp_references<cr>')
 map('n', '<leader>fm', '<cmd>Telescope lsp_implementations<cr>')
 map('n', '<leader>fd', '<cmd>Telescope lsp_definitions<cr>')
+vim.keymap.set('n', '<leader>mr', require("micropython_nvim").run)
 
 
 
 opt.encoding = "utf-8"
 opt.mouse = "a"
-opt.clipboard = "unnamedplus"
 opt.swapfile = false
 opt.backup = false
 opt.number = true
@@ -138,105 +204,116 @@ opt.timeoutlen = 1000
 opt.colorcolumn = "80"
 opt.modeline = true
 --background for gruvbox
-opt.background="dark"
+--opt.background = "dark"
 --opt.persistent_undo = true
 -- I dont know how to these in Lua
 --g.zig_fmt_autosave = 0
 
-require("catppuccin").setup{
-	termi_colors = true,
-	transparent_background = false,
+vim.diagnostic.config({virtual_text = true})
+
+require("catppuccin").setup {
+	term_colors = false,
+	transparent_background = true,
 	color_overrides = {
 		mocha = {
-			base = "#000000",
-			mantle = "#000000",
-			crust = "#000000",
+			--base = "#000000",
+			--mantle = "#000000",
+			--crust = "#000000",
 		},
 	},
 }
 
+-- Dark Theme
+vim.cmd.colorscheme "catppuccin-mocha"
+-- Light Theme 
+-- vim.cmd.colorscheme "catppuccin-latte"
+
 local function my_on_attach(bufnr)
 	local napi = require("nvim-tree.api")
 	local function opts(desc)
-    	return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-  	end
+		return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+	end
 
 	napi.config.mappings.default_on_attach(bufnr)
-	vim.keymap.set('n' , 't' , napi.node.open.tab , opts('Open: New Tab'))
+	vim.keymap.set('n', 't', napi.node.open.tab, opts('Open: New Tab'))
 end
 
 require("nvim-tree").setup({
 	on_attach = my_on_attach,
 })
 
-require'nvim-web-devicons'.setup({
+require 'nvim-web-devicons'.setup({
 
 })
 
 --- require("bufferline").setup{
 ---
 --- }
+vim.api.nvim_set_option("clipboard", "unnamedplus")
 
-
-cmd([[ 
-	syntax enable 
+--- light theme -> catppuccin-latte
+--- dark theme -> catppuccin-mocha
+cmd([[
+	syntax enable
 	if has('persistent_undo') && isdirectory(expand('~').'/.vim/backups')
 	  silent !mkdir ~/.vim/backups > /dev/null 2>&1
 	  set undodir=~/.vim/backups
 	  set undofile
 	endif
-	colorscheme catppuccin-mocha
 
 
 	autocmd StdinReadPre * let s:std_in=1
 
 	autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
     \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
-	
+
 	au BufNewFile,BufRead *.v set filetype=vlang
 	au BufNewFile,BufRead *.md setlocal textwidth=80
+	au BufNewFile,BufRead *.d2 setfiletype d2
+	au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
+
 ]])
 
 local kind_icons = {
-  Text = "",
-  Method = "󰆧",
-  Function = "󰊕",
-  Constructor = "",
-  Field = "󰇽",
-  Variable = "󰂡",
-  Class = "󰠱",
-  Interface = "",
-  Module = "",
-  Property = "󰜢",
-  Unit = "",
-  Value = "󰎠",
-  Enum = "",
-  Keyword = "󰌋",
-  Snippet = "",
-  Color = "󰏘",
-  File = "󰈙",
-  Reference = "",
-  Folder = "󰉋",
-  EnumMember = "",
-  Constant = "󰏿",
-  Struct = "",
-  Event = "",
-  Operator = "󰆕",
-  TypeParameter = "󰅲",
+	Text = "",
+	Method = "󰆧",
+	Function = "󰊕",
+	Constructor = "",
+	Field = "󰇽",
+	Variable = "󰂡",
+	Class = "󰠱",
+	Interface = "",
+	Module = "",
+	Property = "󰜢",
+	Unit = "",
+	Value = "󰎠",
+	Enum = "",
+	Keyword = "󰌋",
+	Snippet = "",
+	Color = "󰏘",
+	File = "󰈙",
+	Reference = "",
+	Folder = "󰉋",
+	EnumMember = "",
+	Constant = "󰏿",
+	Struct = "",
+	Event = "",
+	Operator = "󰆕",
+	TypeParameter = "󰅲",
 }
 cmp.setup({
 	formatting = {
-    format = function(entry, vim_item)
-      vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) 
-	  vim_item.menu = ({
-        buffer = "[Buffer]",
-        nvim_lsp = "[LSP]",
-        luasnip = "[LuaSnip]",
-        nvim_lua = "[Lua]",
-        latex_symbols = "[LaTeX]",
-      })[entry.source.name]
-      return vim_item
-    end
+		format = function(entry, vim_item)
+			vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)
+			vim_item.menu = ({
+				buffer = "[Buffer]",
+				nvim_lsp = "[LSP]",
+				luasnip = "[LuaSnip]",
+				nvim_lua = "[Lua]",
+				latex_symbols = "[LaTeX]",
+			})[entry.source.name]
+			return vim_item
+		end
 	},
 	snippet = {
 		-- REQUIRED - you must specify a snippet engine
@@ -258,8 +335,8 @@ cmp.setup({
 				cmp.select_next_item()
 			elseif vim.fn["vsnip#available"](1) == 1 then
 				feedkeys.call("<Plug>(vsnip-expand-or-jump)", "")
-			--    elseif has_words_before() then
-			--      cmp.complete()
+				--    elseif has_words_before() then
+				--      cmp.complete()
 			else
 				fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
 			end
@@ -331,6 +408,12 @@ cmp.setup.cmdline(":", {
 --  end,
 -- })
 
+local ok, godot = pcall(require, "godot")
+if not ok then
+	return
+end
+
+godot.setup()
 
 ----------------------------------
 -- LANGUAGE SERVERS
@@ -352,124 +435,65 @@ require("lspconfig")["rust_analyzer"].setup({
 	capabilities = capabilities,
 })
 
-local function on_attach(client , bufnr)
+local function on_attach(client, bufnr)
 	print(client.server_capabilities.semanticTokensProvider)
 	client.server_capabilities.semanticTokensProvider = nil
 end
 
-require("lspconfig")["arduino_language_server"].setup({
-	cmd = { "arduino-language-server",
-		"-cli-config", "$HOME/.arduino15/arduino-cli.yaml",
-		"-fqbn","esp8266:esp8266"
-	},
-	capabilities = capabilities,
-	on_attach = on_attach
-})
 
-require("lspconfig")["gopls"].setup({
-	capabilities = capabilities,
-})
-require("lspconfig")["clangd"].setup({
-	capabilities = capabilities,
-})
---require("clangd_extensions").setup{
---	server = {
---		capabilities = clang_cap,
---	},
---}
+g.zig_fmt_parse_errors = 0
 
---require("lspconfig")["ccls"].setup({
---	capabilities = capabilities,
---})
+vim.lsp.enable('intelephense')
+vim.lsp.enable('jdtls')
+vim.lsp.enable("zls");
+vim.lsp.enable("gopls");
+vim.lsp.enable("clangd");
+vim.lsp.enable("basedpyright");
+vim.lsp.enable("clojure_lsp");
+vim.lsp.enable("dartls");
+vim.lsp.enable("vls");
+vim.lsp.enable("serve_d");
+vim.lsp.enable("html");
+vim.lsp.enable("cssls");
+vim.lsp.enable("racket_langserver");
+vim.lsp.enable("gdscript");
+vim.lsp.enable("kotlin_language_server");
+vim.lsp.enable("ts_ls");
+vim.lsp.enable("gdscript");
+vim.lsp.enable("gdscript");
+vim.lsp.enable("gdscript");
 
-require("lspconfig")["pyright"].setup({
-	capabilities = capabilities,
-})
 
-require("lspconfig")["zls"].setup({
-	capabilities = capabilities,
-})
-
-require("lspconfig")["clojure_lsp"].setup({
-	capabilities = capabilities,
-})
-
-require("lspconfig")["dartls"].setup({
-	capabilities = capabilities,
-})
-
-require("lspconfig")["vls"].setup({
-	capabilities = capabilities,
-})
-
-require("lspconfig")["serve_d"].setup({
-	capabilities = capabilities,
-})
-
-require("lspconfig")["html"].setup({
-	capabilities = capabilities,
-})
-
-require("lspconfig")["cssls"].setup({
-	capabilities = capabilities,
-})
-
---require("lspconfig")["eslint"].setup({
---	capabilities = capabilities,
---})
-
---require("lspconfig")["denols"].setup({
---	capabilities = capabilities,
---})
-
-require('lspconfig')['tsserver'].setup({
-	capabilities = capabilities,
-})
-
-require("lspconfig")["racket_langserver"].setup({
-	capabilities = capabilities,
-})
-
-require("lspconfig")["gdscript"].setup({
-	capabilities = capabilities
-})
-
-require("lspconfig")["kotlin_language_server"].setup({
-	capabilities = capabilities,
-})
-
-require("lspconfig")["clojure_lsp"].setup({
-	capabilities = capabilities,
-})
 
 require("lspconfig")["lua_ls"].setup({
-  on_init = function(client)
-    local path = client.workspace_folders[1].name
-    if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
-      return
-    end
+	on_init = function(client)
+		local path = client.workspace_folders[1].name
+		if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+			return
+		end
 
-    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-      runtime = {
-        -- Tell the language server which version of Lua you're using
-        -- (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT'
-      },
-      -- Make the server aware of Neovim runtime files
-      workspace = {
-        checkThirdParty = true,
-        library = {
-			vim.fn.globpath(vim.o.runtimepath , "api/library/"),
-			vim.env.VIMRUNTIME,
-        },
-		userThirdParty = {
-			--"/home/palash/Games/addons",
-		},
-        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-        --library = vim.api.nvim_get_runtime_file("", true)
-      }
-    })
-  end,
+		client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+			runtime = {
+				-- Tell the language server which version of Lua you're using
+				-- (most likely LuaJIT in the case of Neovim)
+				version = 'LuaJIT'
+			},
+			-- Make the server aware of Neovim runtime files
+			workspace = {
+				checkThirdParty = true,
+				library = {
+					vim.fn.globpath(vim.o.runtimepath, "api/library/"),
+					vim.env.VIMRUNTIME,
+					"${3rd}/love2d/library",
+				},
+				userThirdParty = {
+					--"/home/palash/Games/addons",
+				},
+				-- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+				--library = vim.api.nvim_get_runtime_file("", true)
+			}
+		})
+	end,
 	settings = {
 		Lua = {
 
@@ -499,4 +523,14 @@ require("lualine").setup({
 		theme = "catppuccin",
 		icons_enabled = true,
 	},
+
+	sections = {
+		lualine_b = {
+			{
+				require("micropython_nvim").statusline,
+				cond = package.loaded["micropython_nvim"] and require("micropython_nvim").exists,
+			},
+		},
+
+	}
 })

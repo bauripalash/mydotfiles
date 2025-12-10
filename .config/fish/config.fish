@@ -11,20 +11,43 @@ fish_add_path $HOME/meh/emsdk
 fish_add_path $HOME/meh/emsdk/upstream/emscripten
 fish_add_path $HOME/.dotnet/tools
 fish_add_path $HOME/meh/flutter/bin
+fish_add_path $HOME/meh/monero
+fish_add_path $HOME/.rustup/toolchains/esp/xtensa-esp-elf/esp-14.2.0_20240906/xtensa-esp-elf/bin
+fish_add_path $HOME/.config/composer/vendor/bin
+fish_add_path $HOME/meh/jdtls/bin/
+fish_add_path $HOME/.bun/bin
 
 set -gx GPG_TTY (tty)
 set -gx hydro_symbol_prompt ❄️
-set -gx OOO_FORCE_DESKTOP "gnome" libreoffice
+set -gx EMSDK_QUIET 1
+set -gx EDITOR nvim
+
+# ZVM
+set -gx ZVM_INSTALL "$HOME/.zvm/self"
+set -gx PATH $PATH "$HOME/.zvm/bin"
+set -gx PATH $PATH "$ZVM_INSTALL/"
+
+#if [ "$XDG_SESSION_TYPE" = "x11" ];
+#	set -gx OOO_FORCE_DESKTOP "gnome" libreoffice
+#	set -gx GTK_IM_MODULE ibus
+#	set -gx QT_IM_MODULE ibus
+#	set -gx XMODIFIERS @im=ibus
+#end
+
 set -gx ANDROID_HOME $HOME/Android/Sdk
 set -gx ANDROID_NDK_HOME /home/palash/Android/Sdk/ndk/25.1.8937393
 set -gx CHROME_EXECUTABLE /usr/bin/chromium
 set -gx DEBUGINFOD_URLS "https://debuginfod.archlinux.org"
+set -gx JAVA_HOME /usr/lib/jvm/default
+set -gx LIBCLANG_PATH $HOME/.rustup/toolchains/esp/xtensa-esp32-elf-clang/esp-19.1.2_20250225/esp-clang/lib
 alias vim nvim
 alias vi nvim
 alias sshh "kitty +kitten ssh"
 alias lstat "stat -c \"%a %n\""
 alias clipnur "cargo clippy -- -W clippy::nursery"
 alias emsdk_setup ". home/palash/meh/emsdk/emsdk_env.fish"
+alias ml4w-hyprland "~/.config/ml4w/apps/ML4W_Hyprland_Settings-x86_64.AppImage"
+alias cpixel "cd ~/work/bauripixel"
 
 fish_add_path $ANDROID_HOME/cmdline-tools/latest/bin
 fish_add_path $ANDROID_HOME/platform-tools
@@ -85,3 +108,10 @@ function makelight
 end
 
 #makelight
+source "/home/palash/meh/emsdk/emsdk_env.fish"
+
+
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH

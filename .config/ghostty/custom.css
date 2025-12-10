@@ -1,0 +1,32 @@
+headerbar {
+  margin: 0px;
+  padding: 0px;
+  min-height: 20px;
+  opacity: 0;
+}
+
+tabbar tabbox {
+  margin: 0px;
+  padding: 0px;
+  min-height: 10px;
+  background-color: #0f111b;
+  font-family: Jetbrains Mono;
+  opacity: 1;
+}
+
+tabbar tabbox tab {
+  margin: 0;
+  padding: 0;
+  color: #9ca3af;
+}
+
+tabbar tabbox tab:selected {
+  background-color: #16172d;
+  color: #00a3cc;
+  opacity: 1;
+}
+
+tabbar tabbox tab label {
+  font-size: 12px;
+  opacity: 0.5;
+}

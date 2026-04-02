@@ -1,0 +1,22 @@
+=== Applications ===
+Win+Enter = Terminal
+Ctrl+Shift+T = Floating Terminal
+Win+Shift+Enter = File Manager
+Win+R = Rofi
+Win+Shift+F = Firefox
+Win+Shift+V = Clipboard
+
+=== Utils ===
+PrintScrn = Screeshot screen
+Ctrl+PrintScrn = Screenshot region
+Ctrl+Shift+PrintScrn = Select + Screeshot
+
+=== System ===
+Win+Q = Quit Window
+Win+V = Toggle Floating
+Win+NUM = Go to the NUMth workspace
+Win+Shift+M = Logout
+Win+Shift+W = Restart Waybar
+Win+J = Switch Layout
+Win+Shift+C = Window Float + Center
+

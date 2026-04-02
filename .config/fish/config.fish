@@ -29,9 +29,9 @@ set -gx PATH $PATH "$ZVM_INSTALL/"
 
 #if [ "$XDG_SESSION_TYPE" = "x11" ];
 #	set -gx OOO_FORCE_DESKTOP "gnome" libreoffice
-#	set -gx GTK_IM_MODULE ibus
-#	set -gx QT_IM_MODULE ibus
-#	set -gx XMODIFIERS @im=ibus
+#	set -gx GTK_IM_MODULE fcitx
+#	set -gx QT_IM_MODULE fcitx
+#	set -gx XMODIFIERS @im=fcitx
 #end
 
 set -gx ANDROID_HOME $HOME/Android/Sdk
@@ -46,7 +46,7 @@ alias sshh "kitty +kitten ssh"
 alias lstat "stat -c \"%a %n\""
 alias clipnur "cargo clippy -- -W clippy::nursery"
 alias emsdk_setup ". home/palash/meh/emsdk/emsdk_env.fish"
-alias ml4w-hyprland "~/.config/ml4w/apps/ML4W_Hyprland_Settings-x86_64.AppImage"
+#alias ml4w-hyprland "~/.config/ml4w/apps/ML4W_Hyprland_Settings-x86_64.AppImage"
 alias cpixel "cd ~/work/bauripixel"
 
 fish_add_path $ANDROID_HOME/cmdline-tools/latest/bin

@@ -1,0 +1,178 @@
+/* vim: set filetype=less : */
+
+@define-color color_red #f7768e;
+@define-color color_green #9ece6a;
+@define-color color_orange #e0af68;
+@define-color color_blue #7aa2f7;
+@define-color color_purple #bb9af7;
+@define-color color_cyan #7dcfff;
+@define-color color_bg #0C0E14;
+/* -- Global rules -- */
+* {
+  border: none;
+  font-family: "JetbrainsMono Nerd Font";
+  font-size: 12px;
+  min-height: 8px;
+  margin: 0px;
+  padding: 0px;
+}
+
+window#waybar {
+  background: @color_bg;
+  opacity: 0.9
+  
+}
+
+window#waybar.empty #window {
+    background-color:transparent;
+}
+
+window#waybar:hover{
+}
+
+window#waybar.hidden {
+  opacity: 0.2;
+}
+
+/* - Genera rules for visible modules -- */
+#custom-archicon,
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#custom-cliphist,
+#custom-swaync,
+#idle_inhibitor,
+#pulseaudio,
+#pulseaudio-slider,
+#network,
+#custom-fcitx {
+    border: 2px solid @color_cyan;
+    color: @color_cyan;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    transition: none;
+}
+
+/* Separation to the left */
+#custom-archicon,
+#cpu,
+#idle_inhibitor {
+    margin-left: 5px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+/* Separation to the rigth */
+#clock,
+#temperature,
+#custom-fcitx {
+  margin-right: 5px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#window{
+    color: @color_cyan;
+    font-size: 8px;
+}
+
+/* -- Specific styles -- */
+
+/* Modules left */
+#custom-archicon {
+  font-size: 18px;
+  color: @color_blue;
+  background: @color_bg;
+  padding-right: 17px;
+}
+
+#clock,
+#cpu, #memory, #disk, #temperature, #battery{
+    color: @color_cyan;
+    font-weight: bold;
+}
+
+
+
+
+/* Modules center */
+#workspaces {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  margin: 1px 5px;
+  padding: 0px 6px;
+}
+
+#workspaces button {
+  color: @color_blue;
+  background: transparent;
+  padding: 4px 4px;
+  transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+}
+
+#workspaces button.occupied {
+  color: @color_blue;
+}
+
+#workspaces button.active {
+  color: @color_cyan;
+  text-shadow: 0 0 4px @color_cyan;
+}
+
+#workspaces button:hover {
+  color: @color_red;
+}
+
+#workspaces button.active:hover {
+    color: @color_red;
+}
+
+/* Modules right */
+#taskbar {
+  background: transparent;
+  border-radius: 10px;
+  padding: 0px 5px;
+  margin: 5px 5px;
+}
+
+#taskbar button {
+  padding: 0px 0px;
+  margin: 0px 2px;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+  background: transparent;
+}
+
+
+
+
+#idle_inhibitor,
+#custom-cliphist,
+#pulseaudio,
+#pulseaudio-slider,
+#network,
+#custom-fcitx{
+    border: 2px solid @color_cyan;
+}
+
+#custom-fcitx{
+    margin-right: 10px;
+}
+
+#battery{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+/* === Optional animation === */
+@keyframes blink {
+  to {
+    background-color: #BF616A;
+    color: #B5E8E0;
+  }
+}
